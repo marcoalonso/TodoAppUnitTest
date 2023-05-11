@@ -128,14 +128,40 @@ class when_user_deletes_a_new_task_successfully : XCTestCase {
         tasklistCollectionView.buttons["Delete"].tap()
     }
     
-    //Option 2
-//    func test_should_delete_task_successfully_tapping_delete_button_cell(){
-//        let cell = app.tables["taskList"].cells["Study SwiftUI and make apps, Medium"]
-//        cell.tap()
-//        cell.swipeLeft()
-//        app.tables["taskList"].buttons["Delete"].tap()
-//        XCTAssertFalse(cell.exists)
-//    }
     
+}
+
+class when_user_marks_task_as_favorite: XCTestCase {
+    private var app: XCUIApplication!
+    
+    override  func setUp() {
+        app = XCUIApplication()
+        continueAfterFailure = false
+        app.launch()
+        
+        ///Create a task of example
+        let titleTextField = app.textFields["titleTextField"]
+        titleTextField.tap()
+        titleTextField.typeText("Study SwiftUI and make apps")
+        
+        let saveTaskButton = app.buttons["saveTaskButton"]
+        saveTaskButton.tap()
+    }
+        
+    func test_should_displayed_updated_task_on_screen_as_favorite(){
+        
+        
+        app.collectionViews["taskList"].cells.children(matching: .other).element(boundBy: 1).children(matching: .other).element.tap()
+        app/*@START_MENU_TOKEN@*/.images["favoriteImage"]/*[[".images[\"Love\"]",".images[\"favoriteImage\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app.navigationBars["Study SwiftUI and make apps"]/*@START_MENU_TOKEN@*/.buttons["closeButton"]/*[[".otherElements[\"Close\"]",".buttons[\"Close\"]",".buttons[\"closeButton\"]",".otherElements[\"closeButton\"]"],[[[-1,2],[-1,1],[-1,3,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        
+        
+        XCTAssertTrue(app.collectionViews["taskList"].cells.children(matching: .other).element(boundBy: 1).children(matching: .other).element.exists)
+    }
+    
+    override func tearDown() {
+        super.tearDown()
+        Springboard.deleteApp()
+    }
     
 }
